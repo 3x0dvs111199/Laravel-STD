@@ -1,0 +1,91 @@
+# Laravel Docker Setup
+
+This repository contains a pre-configured Laravel development environment using Docker and Docker Compose. It includes services for Nginx, PHP-FPM, MariaDB, Redis, Mailhog, Composer, and Node.js (npm).
+
+## Prerequisites
+
+Ensure the following dependencies are installed on your system:
+- [Docker](https://docs.docker.com/get-docker/)
+- [Docker Compose](https://docs.docker.com/compose/install/)
+- [Git](https://git-scm.com/downloads)
+
+## Installation and Setup
+
+### 1. Clone the Repository
+
+Using SSH (recommended):
+```sh
+git clone git@github.com:3x0dvs111199/Laravel-STD.git
+cd Laravel-STD
+```
+Or using HTTPS:
+```sh
+git clone https://github.com/3x0dvs111199/Laravel-STD.git
+cd Laravel-STD
+```
+
+### 2. Set Up Environment Variables
+
+Copy the `.env.example` file to `.env`:
+```sh
+cp src/.env.example src/.env
+```
+Update the `.env` file as needed.
+
+### 3. Build and Start Docker Containers
+
+Run the following command to build and start the services in detached mode:
+```sh
+docker-compose up -d --build
+```
+Check running containers:
+```sh
+docker ps
+```
+
+### 4. Laravel Setup
+
+Run the necessary Laravel setup commands inside the `app` container:
+```sh
+docker-compose exec app composer install   # Install dependencies
+```
+```sh
+docker-compose exec app php artisan key:generate  # Generate application key
+```
+```sh
+docker-compose exec app php artisan migrate --seed  # Run database migrations
+```
+
+### 5. Accessing the Application
+
+- **Laravel App**: [http://localhost](http://localhost)
+- **Mailhog (Email Testing)**: [http://localhost:8025](http://localhost:8025)
+
+## Auto-Start Docker on System Boot
+
+To ensure Docker starts on boot:
+```sh
+sudo systemctl enable docker
+```
+
+To make Docker Compose services start after reboot:
+```sh
+crontab -e
+```
+Add the following line at the bottom:
+```
+@reboot cd /path/to/Laravel-STD && docker-compose up -d
+```
+
+## Stopping the Containers
+To stop and remove all running containers:
+```sh
+docker-compose down
+```
+
+## Contributing
+Feel free to fork this repository and submit pull requests for improvements.
+
+## License
+This project is open-source and available under the [MIT License](LICENSE).
+
